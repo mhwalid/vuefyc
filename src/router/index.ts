@@ -6,7 +6,6 @@ import SharePriceHistory from '../views/SharePriceHistory.vue'
 import SharePriceHistoryall from '../views/SharePriceHistoryall.vue'
 import Transaction from '../views/Transaction.vue'
 import UserLogin from '../views/admin/UserLogin.vue'
-import User from '../views/User.vue'
 
 const routes = [
   { path: "/",name:"home", component: Home },
@@ -15,12 +14,9 @@ const routes = [
   { path: "/transaction",name:"transaction", component: Transaction },
   {path: '/sharePriceHistories/:sharePriceId',name:"sharePriceHistoriesUser",component: SharePriceHistory,},
   {path: '/sharePriceHistories',name:"sharePriceHistories",component: SharePriceHistoryall,},
-  {path: '/UserLogin',name:"UserLogin",component: UserLogin,},
-  {path: '/User',name:"User",component: User,},
+  {path: '/UserLogin',name:"UserLogin",component: UserLogin,}
   
   // {path: '/:catchAll(.*)*',component: SharePriceHistoryall,},
-
-
 ];
 
 const history = createWebHistory();

@@ -24,7 +24,7 @@ export const useSharePriceHistoryStore = defineStore('sharePriceHistory', {
          this.sharePriceHistories = data;
       } catch (error) {
         console.error('Error fetching sharePriceHistories:', error);
-        // Handle error as needed
+       
       }
     },
 
@@ -33,6 +33,15 @@ export const useSharePriceHistoryStore = defineStore('sharePriceHistory', {
         const response = await fetch(`http://localhost:8080/app/sharePriceHistories/sharePrices/1`);
         const data = await response.json();
         this.sharePriceHistories = data;
+      } catch (error) {
+        console.error('Error fetching sharePriceHistory by ID:', error);
+      }
+    },
+    async getname(Id: number): Promise<void> {
+      try {
+        const response = await fetch(`http://localhost:8080/app/sharePrices/${Id}`);
+        const data = await response.json();
+        return data.sharePrice.name
       } catch (error) {
         console.error('Error fetching sharePriceHistory by ID:', error);
       }

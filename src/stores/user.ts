@@ -1,4 +1,3 @@
-// store/user.ts
 import { defineStore } from 'pinia';
 
 interface User {
