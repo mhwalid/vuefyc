@@ -22,16 +22,24 @@ export const useAuthStore = defineStore('auth', {
   actions: {
     async login(email: string, password: string): Promise<void> {
       try {
-        const response: AxiosResponse<User> = await axios.post(
-          'http://localhost:8080/auth/login',
-          {
-            email: email,
-            password: password,
-          }
-        );
+        const response = await fetch('http://localhost:8080/auth/login', {
+          method: 'POST',
+          credentials: "include",
+          redirect: "follow",
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Access-Control-Allow-Credentials': "true"
+          },
+          withCredentials: true,
+          body: JSON.stringify({
+            email,
+            password,
+          }),
+        })
+
         this.user = response.data;
         this.isAuthenticated = true;
-        console.log(this.user)
         localStorage.setItem("user", JSON.stringify(email));
       } catch (error) {
         console.error('Error logging in:', error);
@@ -41,7 +49,7 @@ export const useAuthStore = defineStore('auth', {
 
     async logout(): Promise<void> {
       try {
-        await axios.get('http://localhost:8080/auth/logout');
+        await axios.get('http://localhost:8080/auth/logout', { credentials: "include" });
         localStorage.removeItem("user");
       } catch (error) {
         console.error('Error logging out:', error);
@@ -62,10 +70,27 @@ export const useAuthStore = defineStore('auth', {
       cduAcceptedAt: null,
     ): Promise<void> {
       try {
-        const response: AxiosResponse<User> = await axios.post(
-          'http://localhost:8080/auth/register',
-            {firstName,lastName,email,password,wallet,isCdu ,cduAcceptedAt}
-        );
+        const response = await fetch(
+          'http://localhost:8080/auth/register', {
+          method: 'POST',
+          credentials: "include",
+          redirect: "follow",
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Access-Control-Allow-Credentials': "true"
+          },
+          withCredentials: true,
+          body: JSON.stringify({
+            firstName,
+            lastName,
+            email,
+            password,
+            wallet,
+            isCdu,
+            cduAcceptedAt
+          }),
+        })
 
         this.user = response.data;
         this.isAuthenticated = true;

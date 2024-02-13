@@ -12,20 +12,20 @@ interface Transaction {
 }
 
 interface TransactionState {
-    transactions: Transaction[];
+  transactions: Transaction[];
 }
 
 export const useTransactionStore = defineStore('transaction', {
   state: (): TransactionState => ({
     transactions: [],
-    
+
   }),
 
   actions: {
 
     async getTransactionsByUser(userId: number): Promise<void> {
       try {
-        const response = await fetch(`http://localhost:8080/app/transactions/users/${userId}`);
+        const response = await fetch(`http://localhost:8080/app/transactions/users/${userId}`, { credentials: "include" });
         const data = await response.json();
 
         // Assuming the response structure is an array of transactions
@@ -39,6 +39,7 @@ export const useTransactionStore = defineStore('transaction', {
     async sellShare(volume: number, sharePriceId: number): Promise<void> {
       try {
         const response = await fetch('http://localhost:8080/app/transactions/sell', {
+          credentials: "include",
           method: 'POST',
           body: JSON.stringify({
             volume,
@@ -56,6 +57,7 @@ export const useTransactionStore = defineStore('transaction', {
     async buyShare(volume: number, sharePriceId: number): Promise<void> {
       try {
         const response = await fetch('http://localhost:8080/app/transactions/buy', {
+          credentials: "include",
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

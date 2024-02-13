@@ -19,18 +19,18 @@ export const useSharePriceHistoryStore = defineStore('sharePriceHistory', {
   actions: {
     async getAllSharePriceHistories(): Promise<void> {
       try {
-        const response = await fetch('http://localhost:8080/app/sharePriceHistories');
+        const response = await fetch('http://localhost:8080/app/sharePriceHistories', { credentials: "include" });
         const data = await response.json();
-         this.sharePriceHistories = data;
+        this.sharePriceHistories = data;
       } catch (error) {
         console.error('Error fetching sharePriceHistories:', error);
-       
+
       }
     },
 
     async getSharePriceHistoryById(sharePriceId: number): Promise<void> {
       try {
-        const response = await fetch(`http://localhost:8080/app/sharePriceHistories/sharePrices/1`);
+        const response = await fetch(`http://localhost:8080/app/sharePriceHistories/sharePrices/1`, { credentials: "include" });
         const data = await response.json();
         this.sharePriceHistories = data;
       } catch (error) {
@@ -39,7 +39,7 @@ export const useSharePriceHistoryStore = defineStore('sharePriceHistory', {
     },
     async getname(Id: number): Promise<void> {
       try {
-        const response = await fetch(`http://localhost:8080/app/sharePrices/${Id}`);
+        const response = await fetch(`http://localhost:8080/app/sharePrices/${Id}`, { credentials: "include" });
         const data = await response.json();
         return data.sharePrice.name
       } catch (error) {

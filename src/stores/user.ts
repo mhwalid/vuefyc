@@ -28,11 +28,11 @@ export const useUserStore = defineStore('user', {
   actions: {
     async getOne(): Promise<void> {
       try {
-        const response = await fetch('http://localhost:8080/app/users');
+        const response = await fetch('http://localhost:8080/app/users', { credentials: "include" });
         const data = await response.json();
         // Supposant que la structure de réponse est un objet User
         return this.user = data.user;
-        
+
       } catch (error) {
         console.error('Erreur lors de la récupération de l\'utilisateur :', error);
         // Gérer l'erreur selon les besoins
@@ -41,6 +41,7 @@ export const useUserStore = defineStore('user', {
     async patchWallet(value: number): Promise<void> {
       try {
         const response = await fetch('http://localhost:8080/app/users/wallet', {
+          credentials: "include",
           method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',
@@ -51,8 +52,8 @@ export const useUserStore = defineStore('user', {
         });
 
         // Si vous avez besoin de traiter la réponse, vous pouvez le faire ici
-         const data = await response.json();
-         console.log(data)
+        const data = await response.json();
+        console.log(data)
       } catch (error) {
         console.error('Erreur lors de la mise à jour du porte-monnaie de l\'utilisateur :', error);
         // Gérer l'erreur selon les besoins
@@ -62,6 +63,7 @@ export const useUserStore = defineStore('user', {
     async patchUserInfo(firstName: string, lastName: string): Promise<void> {
       try {
         const response = await fetch('http://localhost:8080/app/users/info', {
+          credentials: "include",
           method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',

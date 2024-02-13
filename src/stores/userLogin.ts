@@ -19,7 +19,7 @@ export const useUserLoginStore = defineStore('userLogin', {
   actions: {
     async getAllUserLogins(): Promise<void> {
       try {
-        const response = await fetch('http://localhost:8080/admin/userLogins');
+        const response = await fetch('http://localhost:8080/admin/userLogins', { credentials: "include" });
         const data = await response.json();
 
         // Supposant que la structure de réponse est un tableau d'objets UserLogin
