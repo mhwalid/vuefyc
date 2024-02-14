@@ -8,7 +8,6 @@
         <div class="" style="height: 400px; width: 400;">
           <Line :data="datasetoldvolume" :options="options" />
         </div>
-        
     </div>
   </template>
   

@@ -1,7 +1,5 @@
 // store/auth.ts
 import { defineStore } from 'pinia';
-import axios, { AxiosResponse } from 'axios';
-
 interface User {
   id: number;
   firstName: string;
@@ -37,10 +35,7 @@ export const useAuthStore = defineStore('auth', {
             password,
           }),
         })
-
-        this.user = response.data;
-        this.isAuthenticated = true;
-        localStorage.setItem("user", JSON.stringify(email));
+        this.isAuthenticated();
       } catch (error) {
         console.error('Error logging in:', error);
         throw new Error('Login failed'); // Gérer les erreurs de manière appropriée
@@ -49,14 +44,20 @@ export const useAuthStore = defineStore('auth', {
 
     async logout(): Promise<void> {
       try {
-        await axios.get('http://localhost:8080/auth/logout', { credentials: "include" });
+        await fetch('http://localhost:8080/auth/logout', { credentials: "include" });
         localStorage.removeItem("user");
       } catch (error) {
         console.error('Error logging out:', error);
-      } finally {
-        // Mettez à jour l'état du store après la déconnexion, que l'appel réussisse ou échoue
-        this.user = null;
-        this.isAuthenticated = false;
+      } 
+    },
+
+    async isAuthenticated(): Promise<void> {
+      try {
+        const response = await fetch('http://localhost:8080/auth/whoiam',{ credentials: "include" });
+        const data = await response.json();
+        localStorage.setItem("user", JSON.stringify(data.userLogin));
+      } catch (error) {
+        console.error('Error fetching sharePriceHistories:', error);
       }
     },
 
@@ -93,8 +94,6 @@ export const useAuthStore = defineStore('auth', {
         })
 
         this.user = response.data;
-        this.isAuthenticated = true;
-        console.log(response.data)
       } catch (error) {
         console.error('Error registering:', error);
         throw new Error('Registration failed'); // Gérer les erreurs de manière appropriée
