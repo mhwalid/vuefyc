@@ -1,4 +1,3 @@
-// store/wallet.ts
 import { defineStore } from 'pinia';
 
 interface Transaction {
@@ -22,20 +21,6 @@ export const useTransactionStore = defineStore('transaction', {
   }),
 
   actions: {
-
-    async getTransactionsByUser(userId: number): Promise<void> {
-      try {
-        const response = await fetch(`http://localhost:8080/app/transactions/users/${userId}`, { credentials: "include" });
-        const data = await response.json();
-
-        // Assuming the response structure is an array of transactions
-        this.transactions = data;
-      } catch (error) {
-        console.error('Error fetching transactions:', error);
-        // Handle error as needed
-      }
-    },
-
     async sellShare(volume: number, sharePriceId: number): Promise<void> {
       try {
         const response = await fetch('http://localhost:8080/app/transactions/sell', {
@@ -47,10 +32,9 @@ export const useTransactionStore = defineStore('transaction', {
           }),
         });
 
-        const data = await response.json();
-        console.log('Sell Share Response:', data);
+        await response.json();
       } catch (error) {
-        console.error('Error selling share:', error);
+        throw new Error('Erreur lors de la vente de l\'action : ' + error);
       }
     },
 
@@ -68,10 +52,9 @@ export const useTransactionStore = defineStore('transaction', {
           }),
         });
 
-        const data = await response.json();
-        console.log('Buy Share Response:', data);
+        await response.json();
       } catch (error) {
-        console.error('Error buying share:', error);
+        throw new Error('Erreur lors de l\'achat de l\'action : ' + error);
       }
     },
   },

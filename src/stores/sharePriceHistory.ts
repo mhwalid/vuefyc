@@ -1,4 +1,3 @@
-// store/sharePriceHistory.ts
 import { defineStore } from 'pinia';
 
 interface SharePriceHistory {
@@ -23,8 +22,7 @@ export const useSharePriceHistoryStore = defineStore('sharePriceHistory', {
         const data = await response.json();
         this.sharePriceHistories = data;
       } catch (error) {
-        console.error('Error fetching sharePriceHistories:', error);
-
+        throw new Error('Erreur lors de la récupération des cours des actions : ' + error);
       }
     },
 
@@ -34,16 +32,17 @@ export const useSharePriceHistoryStore = defineStore('sharePriceHistory', {
         const data = await response.json();
         this.sharePriceHistories = data;
       } catch (error) {
-        console.error('Error fetching sharePriceHistory by ID:', error);
+        throw new Error('Erreur lors de la récupération des cours d\'une action : ' + error);
       }
     },
-    async getname(Id: number): Promise<void> {
+
+    async getSharePriceName(id: number): Promise<void> {
       try {
-        const response = await fetch(`http://localhost:8080/app/sharePrices/${Id}`, { credentials: "include" });
+        const response = await fetch(`http://localhost:8080/app/sharePrices/${id}`, { credentials: "include" });
         const data = await response.json();
         return data.sharePrice.name
       } catch (error) {
-        console.error('Error fetching sharePriceHistory by ID:', error);
+        throw new Error('Erreur lors de la récupération de l\'action par son nom : ' + error);
       }
     },
   },

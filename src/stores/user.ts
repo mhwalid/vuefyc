@@ -6,7 +6,7 @@ interface User {
   last_name: string;
   email: string;
   password: string;
-  wallet: string; // ou number si le montant du porte-monnaie est toujours un nombre
+  wallet: string;
   is_cdu: number;
   cdu_accepted_at: string | null;
   register_at: string;
@@ -30,14 +30,13 @@ export const useUserStore = defineStore('user', {
       try {
         const response = await fetch('http://localhost:8080/app/users', { credentials: "include" });
         const data = await response.json();
-        // Supposant que la structure de réponse est un objet User
         return this.user = data.user;
 
       } catch (error) {
-        console.error('Erreur lors de la récupération de l\'utilisateur :', error);
-        // Gérer l'erreur selon les besoins
+        throw new Error('Erreur lors de la récupération de l\'utilisateur : ' + error);
       }
     },
+
     async patchWallet(value: number): Promise<void> {
       try {
         const response = await fetch('http://localhost:8080/app/users/wallet', {
@@ -51,12 +50,9 @@ export const useUserStore = defineStore('user', {
           }),
         });
 
-        // Si vous avez besoin de traiter la réponse, vous pouvez le faire ici
-        const data = await response.json();
-        console.log(data)
+        await response.json();
       } catch (error) {
-        console.error('Erreur lors de la mise à jour du porte-monnaie de l\'utilisateur :', error);
-        // Gérer l'erreur selon les besoins
+        throw new Error('Erreur lors de la mise à jour du porte-monnaie de l\'utilisateur : ' + error);
       }
     },
 
@@ -73,13 +69,9 @@ export const useUserStore = defineStore('user', {
             lastName,
           }),
         });
-
-        // Si vous avez besoin de traiter la réponse, vous pouvez le faire ici
-        const data = await response.json();
-        console.log(data)
+        await response.json();
       } catch (error) {
-        console.error('Erreur lors de la mise à jour des informations utilisateur :', error);
-        // Gérer l'erreur selon les besoins
+        throw new Error('Erreur lors de la mise à jour des informations utilisateur : ' + error);
       }
     },
   },

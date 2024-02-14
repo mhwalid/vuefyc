@@ -1,5 +1,5 @@
-// store/auth.ts
 import { defineStore } from 'pinia';
+
 interface User {
   id: number;
   firstName: string;
@@ -8,7 +8,6 @@ interface User {
   wallet: number;
   isCdu: boolean;
   cduAcceptedAt: string | null;
-  // Ajoutez d'autres propriétés utilisateur si nécessaire
 }
 
 export const useAuthStore = defineStore('auth', {
@@ -29,7 +28,6 @@ export const useAuthStore = defineStore('auth', {
             'Accept': 'application/json',
             'Access-Control-Allow-Credentials': "true"
           },
-          withCredentials: true,
           body: JSON.stringify({
             email,
             password,
@@ -37,8 +35,7 @@ export const useAuthStore = defineStore('auth', {
         })
         this.isAuthenticated();
       } catch (error) {
-        console.error('Error logging in:', error);
-        throw new Error('Login failed'); // Gérer les erreurs de manière appropriée
+        throw new Error('Erreur lors de la connexion : ' + error);
       }
     },
 
@@ -47,17 +44,17 @@ export const useAuthStore = defineStore('auth', {
         await fetch('http://localhost:8080/auth/logout', { credentials: "include" });
         localStorage.removeItem("user");
       } catch (error) {
-        console.error('Error logging out:', error);
-      } 
+        throw new Error('Erreur lors de la déconnexion : ' + error);
+      }
     },
 
     async isAuthenticated(): Promise<void> {
       try {
-        const response = await fetch('http://localhost:8080/auth/whoiam',{ credentials: "include" });
+        const response = await fetch('http://localhost:8080/auth/whoiam', { credentials: "include" });
         const data = await response.json();
         localStorage.setItem("user", JSON.stringify(data.userLogin));
       } catch (error) {
-        console.error('Error fetching sharePriceHistories:', error);
+        throw new Error('Erreur lors de la vérification de l\'authentification : ' + error);
       }
     },
 
@@ -81,7 +78,6 @@ export const useAuthStore = defineStore('auth', {
             'Accept': 'application/json',
             'Access-Control-Allow-Credentials': "true"
           },
-          withCredentials: true,
           body: JSON.stringify({
             firstName,
             lastName,
@@ -93,10 +89,9 @@ export const useAuthStore = defineStore('auth', {
           }),
         })
 
-        this.user = response.data;
+        this.user = await response.json();
       } catch (error) {
-        console.error('Error registering:', error);
-        throw new Error('Registration failed'); // Gérer les erreurs de manière appropriée
+        throw new Error('Erreur lors de l\'inscription');
       }
     },
   },
