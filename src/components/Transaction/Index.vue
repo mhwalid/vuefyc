@@ -1,5 +1,6 @@
 <template>
   <div class="flex flex-col items-center justify-center px-2 py-2 mx-auto md:h-screen lg:py-0">
+    <button @click="sellShare"></button>
     <div
         class="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
       <div class="p-2 space-y-4 md:space-y-6 sm:p-8">
@@ -35,6 +36,8 @@
 <script lang="ts" setup>
 import {ref} from 'vue';
 import {useTransactionStore} from '@/stores/transaction';
+import { toast } from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
 
 const transactionStore = useTransactionStore();
 const volume = ref(0);
@@ -42,10 +45,16 @@ const sharePriceId = ref(0);
 
 const sellShare = () => {
   transactionStore.sellShare(volume.value, sharePriceId.value);
+  toast.success("vente realisee avec succes ", {
+        autoClose: 1000,
+      }); // ToastOptions
 };
 
 const buyShare = () => {
   transactionStore.buyShare(volume.value, sharePriceId.value);
+  toast.success("l'achat a ete effectué avec succes ", {
+        autoClose: 1000,
+      }); // ToastOptions
 };
 
 </script>

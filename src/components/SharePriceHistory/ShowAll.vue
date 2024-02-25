@@ -8,11 +8,13 @@
 </template>
 
 <script lang="ts" setup>
-import {onMounted} from 'vue';
+import {onMounted, ref} from 'vue';
 import {useSharePriceHistoryStore} from '@/stores/sharePriceHistory';
+import {useSharePriceStore} from '@/stores/sharePrice';
 import {
   CategoryScale,
   Chart as ChartJS,
+  Colors,
   Legend,
   LinearScale,
   LineElement,
@@ -21,13 +23,16 @@ import {
   Tooltip
 } from 'chart.js';
 import {Line} from 'vue-chartjs';
+import { deepStrictEqual } from 'assert';
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
 const sharePriceHistoryStore = useSharePriceHistoryStore();
+const sharePriceStore = useSharePriceStore();
 
 onMounted(() => {
   sharePriceHistoryStore.getAllSharePriceHistories();
+  sharePriceStore.getSharePriceName()
 });
 
 function formatDate(dateString: string) {
@@ -37,19 +42,24 @@ function formatDate(dateString: string) {
   const day = date.getDate().toString().padStart(2, '0');
   return `${year}-${month}-${day}`;
 }
+// let name = ref();
+// var Nom: string;
+// const getshare = async (id:any) => {
+//   Nom = await sharePriceStore.getSharePriceName(id);
+// };
 
-function getname(id: number) {
-  var d = sharePriceHistoryStore.getSharePriceName(id)
-  return d;
-}
+
 
 var datas: any = [];
 var options: any = [];
+
 var sharePriceHistory = sharePriceHistoryStore.sharePriceHistories.sharePriceHistory;
+var sharePriceuse = sharePriceStore.sharePrice;
 if (sharePriceHistory) {
   var nb = [...new Set(sharePriceHistory.map(history => history.share_price_id))];
-  nb.forEach(el => {
-    const filteredHistory = sharePriceHistory.filter(history => history.share_price_id === el);
+  nb.forEach(id => {
+    
+    const filteredHistory = sharePriceHistory.filter(history => history.share_price_id === id);
     const labels = filteredHistory.map(history => formatDate(history.created_at));
     const dataset = filteredHistory.map(history => parseFloat(history.old_value));
     const datasetold_volume = filteredHistory.map(history => parseFloat(history.old_volume));
@@ -77,7 +87,7 @@ if (sharePriceHistory) {
       plugins: {
         title: {
           display: true,
-          text: getname(el as number),
+          text: sharePriceuse.sharePrices[id-1].name,
           font: {
             size: 16
           }
@@ -85,9 +95,12 @@ if (sharePriceHistory) {
       }
     };
 
-    datas[el as number] = data;
-    options[el as number] = option;
+
+    datas[id as number] = data;
+    options[id as number] = option;
 
   });
+
+ 
 }
 </script>
